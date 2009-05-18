@@ -7,8 +7,11 @@
 #
 # License: GPLv2
 #
+# TODO: dealloc
+# TODO: 16:26 < ciaran> initWithSomeitems: should be initWithSomeItems: 
 # TODO: this really needs a proper ObjC parser, nudging regexps is no fun
 # TODO: I'm using separate slots for every Mutator, probably unnecessary complexity
+# TODO: maybe add comments as markers for ivars to tell generator what to leave out, override "retain" etc
 
 import sys
 import string
