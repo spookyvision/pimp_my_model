@@ -2,7 +2,6 @@ see example/ for example input and output
 
 be careful:
 * this script will overwrite .h and corresponding .m of the file you run it with
-* dealloc is still missing - model will leak
 
 mini manual:
 * create a new NSObject subclass
