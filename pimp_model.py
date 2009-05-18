@@ -7,8 +7,6 @@
 #
 # License: GPLv2
 #
-# TODO: <zaphXX> dealloc
-# TODO: <ciaran> initWithSomeitems: should be initWithSomeItems: 
 # TODO: this really needs a proper ObjC parser, nudging regexps is no fun
 # TODO: I'm using separate slots for every Mutator, probably unnecessary complexity
 # TODO: maybe add comments as markers for ivars to tell generator what to leave out, override "retain" etc
@@ -26,7 +24,7 @@ class Argument(object):
         return "in" + self.camelName
     @property
     def camelName(self):
-        return self.name.capitalize()
+        return self.name[0].capitalize() + self.name[1:]
     def signaturePart(self, first = False):
         if first:
             selectorFragment = "initWith" + self.camelName + ":"
@@ -178,13 +176,23 @@ class Property(Mutator):
                 arg.name
                 )
 
+class Dealloc(Mutator):
+    def __init__(self, headerImpl):
+        Mutator.__init__(self, headerImpl, '$dealloc$', '', '@end')
+    @property
+    def implPart(self):
+        return """-(void) dealloc {
+    [super dealloc];
+}
+"""
+
 class Release(Mutator):
     def __init__(self, headerImpl, ivar):
-        Mutator.__init__(self, headerImpl, '$release$')
+        Mutator.__init__(self, headerImpl, '$release$', '', '.*\[super dealloc\]')
         self.ivar = ivar
     @property
     def implPart(self):
-        return "[%s release]" % self.ivar
+        return "    [%s release];" % self.ivar
 
 def read(filename):
     fh = open(filename,"r")
@@ -204,22 +212,22 @@ def run(header):
     header_content = header_content.replace('}\n', '}\n')
 
     hi = HeaderImplPair(header_content, implementation_content)
+    Dealloc(hi).render()
 
     ivars = re.search(r'^.*{(.*)}.*$', header_content, re.DOTALL).groups()[0].split(';')
-    #import pdb; pdb.set_trace()
     properties = []
     args = []
     for ivar in ivars:
         ivar = ivar.strip()
         if not ivar: continue
         ivar = re.sub(';$','', ivar)
-        #TODO: regex kills *** * *** * but we need em
         ctype, name = re.sub(" +", " ", re.sub(r'\**', '', ivar)).split(" ",1)
         is_reference = "*" in ivar
         if is_reference:
             # it's a pointer -> retain property
             behavior = ["retain"]
             ctype += "*"
+            Release(hi, name).render()
         else:
             # assume assign
             behavior = ["assign"]
@@ -234,10 +242,12 @@ def run(header):
         property.render()
     c = Constructor(hi, args)
     c.render()
-    #print header
-    #print hi.header
-    #print "====="
-    #print hi.impl
+    debug = False
+    if debug:
+        print header
+        print hi.header
+        print "====="
+        print hi.impl
     def overwrite(fn, newstr):
         fh = open(fn,"w")
         fh.write(newstr)
