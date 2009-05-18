@@ -1,8 +1,11 @@
 see example/ for example input and output
 
+be careful:
+* this script will overwrite .h and corresponding .m of the file you run it with
+* dealloc is still missing - model will leak
+
 mini manual:
 * create a new NSObject subclass
 * write your instance variables in the .h file
 * run user script
 * profit! You now have properties and an initializer generated for you
-* careful: this script will overwrite .h and corresponding .m of the file you run it with
