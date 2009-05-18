@@ -18,5 +18,5 @@
 
 @property(retain,nonatomic) NSArray* someItems;
 
--(id) initWithSomeitems: (NSArray*) inSomeitems text: (NSString*) inText count: (int) inCount;
+-(id) initWithSomeItems: (NSArray*) inSomeItems text: (NSString*) inText count: (int) inCount;
 @end

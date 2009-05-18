@@ -10,11 +10,20 @@
 
 
 
+-(void) dealloc {
 
--(id) initWithSomeitems: (NSArray*) inSomeitems text: (NSString*) inText count: (int) inCount {
+    [someItems release];
+
+    [text release];
+    [super dealloc];
+}
+
+
+
+-(id) initWithSomeItems: (NSArray*) inSomeItems text: (NSString*) inText count: (int) inCount {
     
     if (self = [super init]) {
-             self.someItems = inSomeitems;
+             self.someItems = inSomeItems;
              self.text = inText;
              self.count = inCount;
 
