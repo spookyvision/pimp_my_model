@@ -265,8 +265,4 @@ def run(header):
     #new_impl.write(hi.impl)
     #new_impl.close()
 
-def test(cls, *args):
-    instance = cls(None, *args)
-    print unicode(instance)
-
 if __name__=="__main__": main()
