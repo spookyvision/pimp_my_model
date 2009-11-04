@@ -4,7 +4,7 @@ be careful:
 * this script will overwrite .h and corresponding .m of the file you run it with
 
 mini manual:
-* install as Xcode user script -- http://developer.apple.com/documentation/DeveloperTools/Conceptual/XcodeWorkspace/310-User_Scrips/custom_scripts.html
+* install as Xcode user script -- http://developer.apple.com/mac/library/documentation/DeveloperTools/Conceptual/XcodeWorkspace/310-User_Scrips/user_scripts.htm
 * create a new NSObject subclass
 * write your instance variables in the .h file
 * run user script
